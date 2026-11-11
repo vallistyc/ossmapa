@@ -21,6 +21,8 @@ const QuickActionsSection = () => (
           <a
             href={href}
             key={number}
+            target={href.startsWith("http") ? "_blank" : undefined}
+            rel={href.startsWith("http") ? "noreferrer" : undefined}
             className="service-card group border-b border-cream/15 bg-charcoal px-1 py-7 transition hover:bg-orange hover:text-ink md:border-b-0 md:px-7 md:even:border-x md:even:border-cream/15"
           >
             <span className="font-jersey-10 text-2xl text-orange group-hover:text-ink">

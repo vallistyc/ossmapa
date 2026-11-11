@@ -1,6 +1,6 @@
-const leaders = ["Ketua 1", "Ketua Umum", "Ketua 2"];
+import { Link } from "react-router-dom";
 
-const LeadershipSection = () => (
+const LeadershipSection = ({ leaders }) => (
   <section id="pengurus" className="bg-charcoal px-6 py-24 sm:px-10 lg:px-20">
     <div className="mx-auto max-w-7xl">
       <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
@@ -20,29 +20,32 @@ const LeadershipSection = () => (
         </a>
       </div>
       <div className="mt-14 grid gap-8 border-t border-cream/15 pt-8 md:grid-cols-3 md:gap-5">
-        {leaders.map((role, index) => (
-          <div
-            key={role}
+        {leaders.map((leader, index) => (
+          <Link
+            to={`/pengurus/${leader.id}`}
+            key={leader.id}
             className={`person-card group ${index === 1 ? "md:-translate-y-8" : ""}`}
           >
             <div className="relative aspect-[0.9] overflow-hidden bg-gradient-to-br from-orange/40 to-ink">
-              <div className="absolute inset-0 grid place-items-center font-jersey-10 text-8xl text-cream/20">
-                OS
-              </div>
+              {leader.image_url ? (
+                <img src={leader.image_url} alt={leader.name} className="h-full w-full object-cover" />
+              ) : (
+                <div className="absolute inset-0 grid place-items-center font-jersey-10 text-8xl text-cream/20">OS</div>
+              )}
               <span className="absolute left-5 top-5 rounded-full border border-cream/25 px-3 py-1 font-outfit text-[10px] uppercase tracking-widest">
-                2026—27
+              {leader.period}
               </span>
               <span className="absolute bottom-5 right-5 grid h-10 w-10 place-items-center rounded-full bg-orange text-xl text-ink transition group-hover:rotate-45">
                 ↗
               </span>
             </div>
             <p className="mt-5 font-outfit text-xs uppercase tracking-[0.22em] text-orange">
-              {role}
+              {leader.role}
             </p>
             <h3 className="mt-1 font-outfit text-2xl font-medium">
-              Nama {role}
+              {leader.name}
             </h3>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

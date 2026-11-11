@@ -22,13 +22,13 @@ export const programs = [
 ];
 
 export const services = [
-  ["01", "Kirim Aspirasi", "Sampaikan ide dan keresahanmu.", "#aspirasi"],
-  ["02", "Kalender Kegiatan", "Lihat agenda OSIS terbaru.", "#proker"],
+  ["01", "Kirim Aspirasi", "Sampaikan ide dan keresahanmu.", "/aspirasi"],
+  ["02", "Ketua OSIS Menjawab", "Berkomunikasi langsung dengan Ketua OSIS.", "https://wa.me/62895323653911"],
   [
     "03",
     "Apresiasi Prestasi",
     "Bagikan Kisah Prestasimu untuk kami publikasi di Sosial Media.",
-    "#blog",
+    "/pendataan/prestasi",
   ],
 ];
 

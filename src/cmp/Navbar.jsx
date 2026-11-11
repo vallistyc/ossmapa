@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 const Navbar = () => {
   const menu = [
     { label: 'Beranda', href: '/' },
-    { label: 'Proker', href: '#proker' },
-    { label: 'Blog', href: '#blog' },
-    { label: 'Aspirasi', href: '#aspirasi' },
+    { label: 'Proker', href: '/proker' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'Aspirasi', href: '/aspirasi' },
   ]
   
   return (
@@ -38,5 +38,4 @@ const Navbar = () => {
 }
 
 export default Navbar
-
 

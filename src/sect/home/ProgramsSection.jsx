@@ -1,7 +1,7 @@
 import { useRef } from "react";
-import { divisions, programs } from "./homeData";
-
 const ProgramsSection = ({
+  divisions,
+  programs,
   activeDivision,
   onDivisionChange,
   showAll,
@@ -65,9 +65,9 @@ const ProgramsSection = ({
         <div className="mt-14 grid gap-4 md:grid-cols-2">
           {visiblePrograms
             .slice(0, showAll ? visiblePrograms.length : 4)
-            .map(([title, division, date], index) => (
+            .map((program, index) => (
               <article
-                key={title}
+                key={program.id}
                 className="program-row group border-t border-cream/15 py-6"
               >
                 <div className="flex items-start justify-between">
@@ -75,17 +75,17 @@ const ProgramsSection = ({
                     0{index + 1}
                   </span>
                   <span className="font-outfit text-[10px] uppercase tracking-widest text-cream/40">
-                    {date}
+                    {program.event_date}
                   </span>
                 </div>
                 <h3 className="mt-5 font-outfit text-2xl font-medium transition group-hover:text-orange">
-                  {title}
+                  {program.title}
                 </h3>
                 <p className="mt-2 font-outfit text-sm leading-6 text-cream/50">
-                  Program kolaboratif untuk bertumbuh dan memberi dampak.
+                  {program.description}
                 </p>
                 <span className="mt-6 inline-block font-outfit text-[10px] uppercase tracking-widest text-orange">
-                  {division}
+                  {program.division}
                 </span>
               </article>
             ))}

@@ -28,6 +28,18 @@ body { margin: 0; background: #050505; }
 .scroll-line span { animation: scroll-pulse 1.8s ease-in-out infinite; }
 .hide-scrollbar { scrollbar-width: none; }
 .hide-scrollbar::-webkit-scrollbar { display: none; }
+.admin-input { display: block; width: 100%; margin-top: 0.5rem; border: 1px solid rgb(241 241 237 / 0.15); border-radius: 0.5rem; background: #050505; padding: 0.7rem 0.8rem; color: #f1f1ed; font-family: "Outfit", sans-serif; font-size: 0.875rem; outline: none; }
+.admin-input:focus { border-color: #ff6d23; }
+.admin-input::placeholder { color: rgb(241 241 237 / 0.35); }
+.admin-input option { background: #0d0d0d; color: #f1f1ed; }
+.admin-editor-loading { min-height: 18rem; margin-top: 0.5rem; border: 1px solid rgb(241 241 237 / 0.15); border-radius: 0.5rem; padding: 1rem; color: rgb(241 241 237 / 0.45); }
+.prose-blog { color: rgb(241 241 237 / 0.78); font-family: "Outfit", sans-serif; font-size: 1.05rem; line-height: 1.9; }
+.prose-blog h2, .prose-blog h3 { margin-top: 2rem; color: #f1f1ed; font-weight: 600; line-height: 1.2; }
+.prose-blog h2 { font-size: 2rem; } .prose-blog h3 { font-size: 1.5rem; }
+.prose-blog p, .prose-blog ul, .prose-blog ol, .prose-blog blockquote { margin-top: 1.25rem; }
+.prose-blog ul, .prose-blog ol { padding-left: 1.5rem; } .prose-blog ul { list-style: disc; } .prose-blog ol { list-style: decimal; }
+.prose-blog blockquote { border-left: 3px solid #ff6d23; padding-left: 1rem; color: rgb(241 241 237 / 0.6); }
+.prose-blog a { color: #ff6d23; text-decoration: underline; }
 .division-scroll-button { display: grid; height: 2rem; width: 2rem; flex: 0 0 auto; place-items: center; border: 1px solid rgb(241 241 237 / 0.2); color: #ff6d23; font-family: "Outfit", sans-serif; font-size: 0.85rem; transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease; }
 .division-scroll-button:hover { border-color: #ff6d23; background: #ff6d23; color: #050505; }
 .hero-ribbon { background: #ff6d23; color: #050505; font-family: "Outfit", sans-serif; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.18em; line-height: 2.4rem; text-transform: uppercase; white-space: nowrap; }
