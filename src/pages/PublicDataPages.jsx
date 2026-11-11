@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import AspirasiModal from "../sect/home/AspirasiModal";
 import { fetchAchievements, fetchHomeData, fetchProgramById, submitAspiration } from "../lib/homeDataApi";
 
 const PageShell = ({ eyebrow, title, children, compact = false, showHomeLink = true }) => (
@@ -67,8 +66,34 @@ export const BlogPage = () => {
 };
 
 export const AspirationsPage = () => {
-  const [open, setOpen] = useState(true);
-  return <PageShell eyebrow="Aspirasi" title="Suara siswa.">{open && <div className="mt-10"><button onClick={() => setOpen(false)} className="rounded-full border border-orange px-5 py-3 font-outfit text-sm text-orange">Tutup form</button><AspirasiModal onClose={() => setOpen(false)} onSubmit={submitAspiration} /></div>}</PageShell>;
+  const [values, setValues] = useState({ name: "", message: "" });
+  const [state, setState] = useState({ loading: false, error: null, success: false });
+
+  const update = (key, value) => setValues((current) => ({ ...current, [key]: value }));
+  const submit = async (event) => {
+    event.preventDefault();
+    setState({ loading: true, error: null, success: false });
+    try {
+      await submitAspiration(values);
+      setValues({ name: "", message: "" });
+      setState({ loading: false, error: null, success: true });
+    } catch (error) {
+      setState({ loading: false, error: error.message, success: false });
+    }
+  };
+
+  return (
+    <PageShell eyebrow="Aspirasi" title="Suara siswa.">
+      <form onSubmit={submit} className="mt-8 max-w-2xl rounded-2xl border border-cream/15 bg-charcoal p-6 sm:mt-10 sm:p-8">
+        <p className="font-outfit text-sm leading-6 text-cream/55">Sampaikan ide, masukan, atau keresahanmu kepada OSIS.</p>
+        <label className="mt-6 block font-outfit text-xs text-cream/65">Nama <span className="text-cream/35">(opsional)</span><input value={values.name} onChange={(event) => update("name", event.target.value)} placeholder="Nama kamu" className="admin-input" /></label>
+        <label className="mt-5 block font-outfit text-xs text-cream/65">Aspirasi<textarea required value={values.message} onChange={(event) => update("message", event.target.value)} placeholder="Tulis aspirasi kamu di sini..." rows="6" className="admin-input resize-y" /></label>
+        {state.error && <p className="mt-5 rounded-lg bg-red-950/50 p-4 text-sm text-red-300">{state.error}</p>}
+        {state.success && <p className="mt-5 rounded-lg bg-green-950/50 p-4 text-sm text-green-300">Aspirasi berhasil dikirim. Terima kasih sudah menyampaikan suaramu.</p>}
+        <button type="submit" disabled={state.loading} className="mt-6 rounded-full bg-orange px-6 py-3 font-outfit text-sm font-semibold text-ink disabled:opacity-50">{state.loading ? "Mengirim..." : "Kirim aspirasi ↗"}</button>
+      </form>
+    </PageShell>
+  );
 };
 
 export const AchievementsPage = () => {
