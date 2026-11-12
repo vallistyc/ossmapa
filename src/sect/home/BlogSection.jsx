@@ -12,6 +12,7 @@ const BlogSection = ({ articles }) => (
         </h2>
       </div>
       <div className="mt-14 grid gap-6 md:grid-cols-3">
+        {articles.length === 0 && <p className="font-outfit text-sm text-cream/50">Tidak Ada Data</p>}
         {articles.map((article) => (
           <article key={article.id} className="group">
             <div className="aspect-[1.35] overflow-hidden rounded-xl bg-charcoal">

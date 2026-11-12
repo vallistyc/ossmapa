@@ -3,7 +3,9 @@ const SponsorBanner = ({ sponsors }) => (
     <p className="absolute left-1/2 top-3 -translate-x-1/2 font-outfit text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/60">
       Sponsor Kami Sebelumnya
     </p>
-    <div className="sponsor-track flex w-max items-center font-outfit text-2xl font-semibold uppercase">
+    {sponsors.length === 0 ? (
+      <p className="text-center font-outfit text-sm text-ink/60">Tidak Ada Data</p>
+    ) : <div className="sponsor-track flex w-max items-center font-outfit text-2xl font-semibold uppercase">
       {[1, 2].map((copy) => (
         <div
           key={copy}
@@ -22,7 +24,7 @@ const SponsorBanner = ({ sponsors }) => (
           ))}
         </div>
       ))}
-    </div>
+    </div>}
   </section>
 );
 

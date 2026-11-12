@@ -15,7 +15,6 @@ import { useHomeData } from "../hooks/useHomeData";
 const Home = () => {
   const { data, loading, error } = useHomeData();
   const [activeDivision, setActiveDivision] = useState("Semua");
-  const [showAllPrograms, setShowAllPrograms] = useState(false);
   const [showAspirasi, setShowAspirasi] = useState(false);
 
   if (loading || !data) {
@@ -38,8 +37,6 @@ const Home = () => {
         programs={data.programs}
         activeDivision={activeDivision}
         onDivisionChange={setActiveDivision}
-        showAll={showAllPrograms}
-        onToggleShowAll={() => setShowAllPrograms((current) => !current)}
       />
       <SponsorBanner sponsors={data.sponsors} />
       <BlogSection articles={data.articles} />

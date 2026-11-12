@@ -51,6 +51,15 @@ const PublicProgramForm = () => {
           <h1 className="mt-4 font-outfit text-5xl font-semibold leading-none sm:text-7xl">Ajukan proker.</h1>
           <p className="mt-6 max-w-xl font-outfit leading-7 text-cream/55">Isi rancangan program kerja. Data akan ditinjau dan diverifikasi Admin sebelum tampil di website.</p>
         </div>
+        <section className="mt-8 rounded-xl border border-orange/25 bg-orange/10 p-5">
+          <p className="font-outfit text-sm font-semibold text-orange">Cara mengisi form</p>
+          <ol className="mt-3 list-decimal space-y-2 pl-5 font-outfit text-sm leading-6 text-cream/65">
+            <li>Tulis nama proker yang singkat dan mudah dipahami.</li>
+            <li>Pilih Sekbid yang menaungi proker tersebut.</li>
+            <li>Isi waktu pelaksanaan serta deskripsi tujuan dan gambaran kegiatan.</li>
+            <li>Periksa kembali data sebelum menekan tombol Kirim proker.</li>
+          </ol>
+        </section>
         <form onSubmit={submit} className="mt-12 rounded-2xl border border-cream/15 bg-charcoal p-6 sm:p-8">
           <label className="block font-outfit text-sm text-cream/70">Nama proker<input required value={form.title} onChange={(event) => update("title", event.target.value)} className="admin-input" placeholder="Contoh: OSIS Mengajar" /></label>
           <label className="mt-5 block font-outfit text-sm text-cream/70">Sekbid

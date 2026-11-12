@@ -32,7 +32,7 @@ const AdminRegister = ({ session }) => {
         error: null,
         success: data.session
           ? "Akun berhasil dibuat. Silakan masuk."
-          : "Akun berhasil dibuat. Cek email untuk verifikasi sebelum masuk.",
+          : "Akun berhasil dibuat. Tunggu admin memverifikasi akunmu dari tab Admin.",
       });
       setForm({ email: "", password: "", confirmation: "" });
     } catch (error) {

@@ -7,7 +7,7 @@ export const adminTables = {
     fields: [
       { key: "title", label: "Judul", type: "text", required: true },
       { key: "sekbid_id", label: "Sekbid", type: "select", dynamicOptions: "sekbids", required: true },
-      { key: "event_date", label: "Waktu pelaksanaan", type: "text", required: true },
+      { key: "event_date", label: "Tanggal pelaksanaan", type: "date", required: true },
       { key: "status", label: "Status pelaksanaan", type: "select", options: ["Belum dimulai", "Sedang berlangsung", "Selesai", "Ditunda", "Dibatalkan"], required: true },
       { key: "description", label: "Deskripsi", type: "textarea", required: true },
       { key: "sort_order", label: "Urutan", type: "number", required: true },
@@ -34,7 +34,7 @@ export const adminTables = {
       { key: "period", label: "Periode", type: "text", required: true },
       { key: "sekbid_id", label: "Sekbid", type: "select", dynamicOptions: "sekbids", required: true },
       { key: "role", label: "Jabatan", type: "select", dynamicRoles: true, required: true },
-      { key: "image_url", label: "URL foto", type: "url" },
+      { key: "image_url", label: "Foto", type: "image" },
       { key: "sort_order", label: "Urutan", type: "number", required: true },
       { key: "published", label: "Tampilkan di website", type: "checkbox" },
     ],
@@ -45,13 +45,12 @@ export const adminTables = {
     fields: [
       { key: "category", label: "Kategori", type: "text", required: true },
       { key: "title", label: "Judul", type: "text", required: true },
-      { key: "slug", label: "Slug URL", type: "text", required: true },
+      { key: "slug", label: "Slug URL", type: "hidden" },
       { key: "excerpt", label: "Ringkasan", type: "textarea", required: true },
       { key: "content_html", label: "Isi artikel", type: "richtext", required: true },
-      { key: "image_url", label: "URL cover", type: "url" },
+      { key: "image_url", label: "Cover", type: "image" },
       { key: "author_name", label: "Penulis", type: "text" },
-      { key: "published_at", label: "Tanggal terbit", type: "date", required: true },
-      { key: "published", label: "Tampilkan di website", type: "checkbox" },
+      { key: "published", label: "Langsung Publikasi?", type: "checkbox" },
     ],
   },
   sponsors: {
@@ -59,7 +58,7 @@ export const adminTables = {
     columns: ["name", "image_url", "sort_order", "published"],
     fields: [
       { key: "name", label: "Nama sponsor", type: "text", required: true },
-      { key: "image_url", label: "URL gambar / logo", type: "url" },
+      { key: "image_url", label: "Logo", type: "image" },
       { key: "sort_order", label: "Urutan", type: "number", required: true },
       { key: "published", label: "Tampilkan di website", type: "checkbox" },
     ],
@@ -81,14 +80,19 @@ export const adminTables = {
   },
   achievements: {
     label: "Prestasi",
-    columns: ["name", "class_name", "title", "level", "event_date", "published"],
+    columns: ["name", "nis", "whatsapp", "class_name", "title", "type", "result", "level", "event_date", "description", "proof_url", "published"],
     fields: [
       { key: "name", label: "Nama siswa", type: "text", required: true },
+      { key: "nis", label: "NIS", type: "text", required: true },
+      { key: "whatsapp", label: "Nomor WhatsApp", type: "tel", required: true },
       { key: "class_name", label: "Kelas", type: "text", required: true },
-      { key: "title", label: "Prestasi", type: "text", required: true },
-      { key: "level", label: "Tingkat", type: "text", required: true },
-      { key: "event_date", label: "Tanggal / tahun", type: "text", required: true },
-      { key: "description", label: "Cerita prestasi", type: "textarea" },
+      { key: "title", label: "Nama prestasi", type: "text", required: true },
+      { key: "type", label: "Jenis prestasi", type: "select", options: ["Lomba", "Pembicara", "Duta", "Riset", "Kepemilikan Bisnis", "Dan Lain-Lain"], required: true },
+      { key: "result", label: "Prestasi", type: "select", options: ["Juara 1", "Juara 2", "Juara 3", "Juara Harapan", "Nominasi"], required: true },
+      { key: "level", label: "Tingkat", type: "select", options: ["Kabupaten", "Provinsi", "Nasional", "Internasional"], required: true },
+      { key: "event_date", label: "Tanggal prestasi", type: "date", required: true },
+      { key: "description", label: "Deskripsi prestasi", type: "textarea", required: true },
+      { key: "proof_url", label: "URL bukti prestasi", type: "url" },
       { key: "published", label: "Tampilkan di website", type: "checkbox" },
     ],
   },
@@ -165,6 +169,10 @@ export const uploadSponsorImage = async (file) => {
 
 export const uploadLeaderImage = async (file) => {
   return uploadImage(file, "leaders");
+};
+
+export const uploadBlogImage = async (file) => {
+  return uploadImage(file, "blog-images");
 };
 
 export const uploadPublicLeaderImage = async (file) => {

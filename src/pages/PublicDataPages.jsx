@@ -42,7 +42,7 @@ const ProgramsList = ({ data, error, divisions }) => {
           </Link>
         ))}
       </div>
-      {programs.length === 0 && <p className="mt-8 font-outfit text-sm text-cream/50">Belum ada proker pada Sekbid ini.</p>}
+      {programs.length === 0 && <p className="mt-8 font-outfit text-sm text-cream/50">Tidak Ada Data</p>}
     </PageShell>
   );
 };
@@ -99,5 +99,5 @@ export const AspirationsPage = () => {
 export const AchievementsPage = () => {
   const [state, setState] = useState({ loading: true, achievements: [] });
   useEffect(() => { fetchAchievements().then((result) => setState({ loading: false, achievements: result.achievements })); }, []);
-  return <PageShell eyebrow="Prestasi siswa" title="Apresiasi yang menginspirasi."><Link to="/pendataan/prestasi" className="mt-8 inline-block rounded-full bg-orange px-5 py-3 font-outfit text-sm font-semibold text-ink">Kirim prestasi ↗</Link>{state.loading ? <p className="mt-12 font-outfit text-sm text-cream/50">Memuat prestasi...</p> : <div className="mt-12 grid gap-4 md:grid-cols-2">{state.achievements.map((item) => <article key={item.id} className="rounded-xl border border-cream/15 bg-charcoal p-5"><p className="font-outfit text-xs text-orange">{item.level} · {item.event_date}</p><h2 className="mt-3 font-outfit text-xl">{item.title}</h2><p className="mt-2 font-outfit text-sm text-cream/55">{item.name} · {item.class_name}</p>{item.description && <p className="mt-4 font-outfit text-sm leading-6 text-cream/60">{item.description}</p>}</article>)}</div>}</PageShell>;
+  return <PageShell eyebrow="Prestasi siswa" title="Apresiasi yang menginspirasi."><Link to="/pendataan/prestasi" className="mt-8 inline-block rounded-full bg-orange px-5 py-3 font-outfit text-sm font-semibold text-ink">Kirim prestasi ↗</Link>{state.loading ? <p className="mt-12 font-outfit text-sm text-cream/50">Memuat prestasi...</p> : state.achievements.length === 0 ? <p className="mt-12 font-outfit text-sm text-cream/50">Tidak Ada Data</p> : <div className="mt-12 grid gap-4 md:grid-cols-2">{state.achievements.map((item) => <article key={item.id} className="rounded-xl border border-cream/15 bg-charcoal p-5"><p className="font-outfit text-xs text-orange">{item.level} · {item.result} · {item.event_date}</p><h2 className="mt-3 font-outfit text-xl">{item.title}</h2><p className="mt-2 font-outfit text-sm text-cream/55">{item.name} · {item.class_name} · {item.type}</p>{item.description && <p className="mt-4 font-outfit text-sm leading-6 text-cream/60">{item.description}</p>}{item.proof_url && <a href={item.proof_url} target="_blank" rel="noreferrer" className="mt-4 inline-block font-outfit text-xs text-orange hover:underline">Lihat bukti ↗</a>}</article>)}</div>}</PageShell>;
 };

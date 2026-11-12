@@ -122,7 +122,22 @@ export const submitAspiration = async ({ name, message }) => {
 
 export const submitAchievement = async (values) => {
   if (!isSupabaseConfigured) throw new Error("Supabase belum dikonfigurasi.");
-  const { error } = await supabase.from("achievements").insert({ ...values, published: false });
+  const { proof_file: proofFile, ...achievement } = values;
+  if (!proofFile) throw new Error("Bukti prestasi wajib diunggah.");
+  const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+  if (!allowedTypes.includes(proofFile.type)) throw new Error("Bukti prestasi harus berupa JPG, PNG, atau PDF.");
+  if (proofFile.size > 10 * 1024 * 1024) throw new Error("Ukuran bukti prestasi maksimal 10 MB.");
+
+  const extension = proofFile.name.split(".").pop()?.toLowerCase();
+  const filePath = `${crypto.randomUUID()}.${extension}`;
+  const { error: uploadError } = await supabase.storage.from("achievement-submissions").upload(filePath, proofFile, {
+    contentType: proofFile.type,
+    upsert: false,
+  });
+  if (uploadError) throw new Error(`Bukti prestasi gagal diunggah: ${uploadError.message}`);
+
+  const { data: proofData } = supabase.storage.from("achievement-submissions").getPublicUrl(filePath);
+  const { error } = await supabase.from("achievements").insert({ ...achievement, proof_url: proofData.publicUrl, published: false });
   if (error) throw new Error(`Data prestasi gagal dikirim: ${error.message}`);
 };
 
@@ -130,7 +145,7 @@ export const fetchAchievements = async () => {
   if (!isSupabaseConfigured) return { achievements: [], error: null };
   const { data, error } = await supabase
     .from("achievements")
-    .select("id,name,class_name,title,level,event_date,description")
+    .select("id,name,nis,whatsapp,class_name,title,type,result,level,event_date,description,proof_url")
     .eq("published", true)
     .order("created_at", { ascending: false });
   return { achievements: data ?? [], error };

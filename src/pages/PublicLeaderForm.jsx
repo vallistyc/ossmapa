@@ -68,6 +68,15 @@ const PublicLeaderForm = () => {
           <h1 className="mt-4 font-outfit text-5xl font-semibold leading-none sm:text-7xl">Data pengurus.</h1>
           <p className="mt-6 max-w-xl font-outfit leading-7 text-cream/55">Isi data diri kepengurusan. Data akan diperiksa pengurus inti sebelum ditampilkan di website.</p>
         </div>
+        <section className="mt-8 rounded-xl border border-orange/25 bg-orange/10 p-5">
+          <p className="font-outfit text-sm font-semibold text-orange">Cara mengisi form</p>
+          <ol className="mt-3 list-decimal space-y-2 pl-5 font-outfit text-sm leading-6 text-cream/65">
+            <li>Isi nama, NIS, dan periode kepengurusan dengan data yang benar.</li>
+            <li>Pilih Sekbid terlebih dahulu, lalu pilih jabatan yang sesuai.</li>
+            <li>Upload foto JPG, PNG, atau WEBP maksimal 5 MB.</li>
+            <li>Periksa kembali data sebelum menekan tombol Kirim data.</li>
+          </ol>
+        </section>
         <form onSubmit={submit} className="mt-12 rounded-2xl border border-cream/15 bg-charcoal p-6 sm:p-8">
           <label className="block font-outfit text-sm text-cream/70">Nama lengkap<input required value={form.name} onChange={(event) => update("name", event.target.value)} className="admin-input" /></label>
           <label className="mt-5 block font-outfit text-sm text-cream/70">NIS<input required value={form.nis} onChange={(event) => update("nis", event.target.value)} className="admin-input" inputMode="numeric" /></label>
@@ -84,9 +93,8 @@ const PublicLeaderForm = () => {
               {roleOptions.map((role) => <option key={role} value={role}>{role}</option>)}
             </select>
           </label>
-          <label className="mt-5 block font-outfit text-sm text-cream/70">URL foto (opsional)<input type="url" value={form.image_url} onChange={(event) => update("image_url", event.target.value)} className="admin-input" placeholder="https://..." /></label>
           <label className="mt-5 block font-outfit text-sm text-cream/70">
-            Atau upload foto
+            Upload foto (opsional)
             <input type="file" accept="image/*" className="admin-input file:mr-3 file:rounded-full file:border-0 file:bg-orange file:px-3 file:py-1 file:text-ink" onChange={async (event) => { const file = event.target.files[0]; if (!file) return; try { update("image_url", await uploadPublicLeaderImage(file)); } catch (error) { setState({ loading: false, error: error.message, success: false }); } }} />
             <span className="mt-2 block text-xs text-cream/40">JPG, PNG, atau WEBP. Maksimal 5 MB.</span>
           </label>

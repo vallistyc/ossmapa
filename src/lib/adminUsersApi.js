@@ -7,10 +7,10 @@ const assertConfigured = () => {
 export const fetchAdminInvitations = async () => {
   assertConfigured();
   const { data, error } = await supabase
-    .from("admin_invitations")
-    .select("id,email,created_at,accepted_at")
+    .from("admin_accounts")
+    .select("id,email,created_at,approved,approved_at")
     .order("created_at", { ascending: false });
-  if (error) throw new Error(`Gagal memuat undangan: ${error.message}`);
+  if (error) throw new Error(`Gagal memuat akun admin: ${error.message}`);
   return data ?? [];
 };
 
@@ -25,6 +25,17 @@ export const createAdminInvitation = async (email) => {
 
 export const revokeAdminInvitation = async (id) => {
   assertConfigured();
-  const { error } = await supabase.from("admin_invitations").delete().eq("id", id);
-  if (error) throw new Error(`Gagal mencabut undangan: ${error.message}`);
+  const { error } = await supabase.from("admin_accounts").update({ approved: false, approved_at: null, approved_by: null }).eq("id", id);
+  if (error) throw new Error(`Gagal membatalkan verifikasi admin: ${error.message}`);
+};
+
+export const verifyAdminAccount = async (id) => {
+  assertConfigured();
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError || !userData.user) throw new Error("Sesi admin tidak ditemukan.");
+  const { error } = await supabase
+    .from("admin_accounts")
+    .update({ approved: true, approved_at: new Date().toISOString(), approved_by: userData.user.id })
+    .eq("id", id);
+  if (error) throw new Error(`Gagal memverifikasi admin: ${error.message}`);
 };

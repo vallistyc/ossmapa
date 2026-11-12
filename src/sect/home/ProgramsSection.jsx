@@ -1,15 +1,14 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 const ProgramsSection = ({
   divisions,
   programs,
   activeDivision,
   onDivisionChange,
-  showAll,
-  onToggleShowAll,
 }) => {
   const divisionScroller = useRef(null);
   const visiblePrograms = programs.filter(
-    (program) => activeDivision === "Semua" || program[1] === activeDivision,
+    (program) => activeDivision === "Semua" || program.division === activeDivision,
   );
 
   const scrollDivisions = (distance) => {
@@ -63,8 +62,10 @@ const ProgramsSection = ({
           </div>
         </div>
         <div className="mt-14 grid gap-4 md:grid-cols-2">
-          {visiblePrograms
-            .slice(0, showAll ? visiblePrograms.length : 4)
+          {visiblePrograms.length === 0 ? (
+            <p className="font-outfit text-sm text-cream/50">Tidak Ada Data</p>
+          ) : visiblePrograms
+            .slice(0, 4)
             .map((program, index) => (
               <article
                 key={program.id}
@@ -90,14 +91,9 @@ const ProgramsSection = ({
               </article>
             ))}
         </div>
-        <button
-          type="button"
-          onClick={onToggleShowAll}
-          className="mt-10 border-b border-orange pb-2 font-outfit text-sm text-orange"
-        >
-          {showAll ? "Tampilkan lebih sedikit" : "Lihat semua program kerja"}{" "}
-          <span className="ml-3">↗</span>
-        </button>
+        <Link to="/proker" className="mt-10 inline-block border-b border-orange pb-2 font-outfit text-sm text-orange">
+          Lihat semua program kerja <span className="ml-3">↗</span>
+        </Link>
       </div>
     </section>
   );

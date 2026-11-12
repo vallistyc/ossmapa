@@ -7,9 +7,19 @@ const AdminLogin = ({ session }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [resetMode, setResetMode] = useState(false);
-  const [status, setStatus] = useState({ loading: false, error: null, success: null });
+  const isAdmin = session?.user?.app_metadata?.role === "admin";
+  const loginError = new URLSearchParams(window.location.search).get("error");
+  const [status, setStatus] = useState({
+    loading: false,
+    error: loginError === "pending"
+      ? "Akun belum diverifikasi oleh admin. Silakan tunggu persetujuan dari tab Admin."
+      : loginError === "unauthorized"
+        ? "Akun ini belum memiliki akses admin."
+        : null,
+    success: null,
+  });
 
-  if (session) return <Navigate to="/admin" replace />;
+  if (session && isAdmin) return <Navigate to="/admin" replace />;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,13 +33,23 @@ const AdminLogin = ({ session }) => {
         if (error) throw error;
         setStatus({ loading: false, error: null, success: "Link reset password sudah dikirim ke email." });
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        if (data.session?.user?.app_metadata?.role !== "admin") {
+          setStatus({ loading: false, error: "Akun ini belum memiliki akses admin.", success: null });
+          return;
+        }
         navigate("/admin", { replace: true });
       }
     } catch {
       setStatus({ loading: false, error: "Email atau password tidak valid.", success: null });
     }
+  };
+
+  const handleSignOut = async () => {
+    if (!supabase) return;
+    await supabase.auth.signOut();
+    setStatus({ loading: false, error: null, success: null });
   };
 
   return (
@@ -58,6 +78,11 @@ const AdminLogin = ({ session }) => {
         <button type="button" onClick={() => setResetMode((value) => !value)} className="mt-5 w-full font-outfit text-xs text-cream/55 hover:text-orange">
           {resetMode ? "Kembali ke login" : "Lupa password?"}
         </button>
+        {session && (
+          <button type="button" onClick={handleSignOut} className="mt-3 w-full font-outfit text-xs text-cream/55 hover:text-orange">
+            Keluar dari akun ini
+          </button>
+        )}
       </form>
     </main>
   );

@@ -20,6 +20,7 @@ const LeadershipSection = ({ leaders }) => (
         </a>
       </div>
       <div className="mt-14 grid gap-8 border-t border-cream/15 pt-8 md:grid-cols-3 md:gap-5">
+        {leaders.length === 0 && <p className="font-outfit text-sm text-cream/50">Tidak Ada Data</p>}
         {leaders.map((leader, index) => (
           <Link
             to={`/pengurus/${leader.id}`}
