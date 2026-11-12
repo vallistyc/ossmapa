@@ -41,7 +41,7 @@ export const fetchHomeData = async () => {
   try {
     const [programs, leaders, articles, sponsors] = await Promise.all([
       readPrograms(),
-      readTable("leaders", "id,name,role,period,image_url,instagram,whatsapp,nis"),
+      readTable("leaders", "id,name,role,period,image_url,instagram,class_name,motto"),
       readTable("blog_posts", "id,category,title,slug,excerpt,content_html,image_url,author_name,published_at", "published_at"),
       readTable("sponsors", "id,name,image_url"),
     ]);
@@ -92,7 +92,7 @@ export const fetchLeaderById = async (id) => {
 
   const { data, error } = await supabase
     .from("leaders")
-    .select("id,name,role,period,image_url,instagram,whatsapp,nis,sekbid_id")
+    .select("id,name,role,period,image_url,instagram,class_name,motto,sekbid_id")
     .eq("id", id)
     .eq("published", true)
     .maybeSingle();

@@ -27,8 +27,8 @@ const emptyValues = (config) =>
 
 const createLeaderRow = (index) => ({
   name: "",
-  nis: "",
-  whatsapp: "",
+  class_name: "",
+  motto: "",
   instagram: "",
   period: "2026—27",
   sekbid_id: "",
@@ -40,6 +40,11 @@ const createLeaderRow = (index) => ({
 
 const bphRoles = ["Ketua Umum", "Ketua 1", "Ketua 2", "Sekretaris 1", "Sekretaris 2", "Bendahara 1", "Bendahara 2"];
 const divisionRoles = ["Co", "Anggota"];
+const classGroups = {
+  X: ["X-E1", "X-E2"],
+  XI: Array.from({ length: 10 }, (_, index) => `XI-F${index + 1}`),
+  XII: Array.from({ length: 10 }, (_, index) => `XII-F${index + 1}`),
+};
 const slugify = (value) => value
   .toLowerCase()
   .normalize("NFKD")
@@ -48,7 +53,7 @@ const slugify = (value) => value
   .replace(/^-+|-+$/g, "");
 const exportColumns = {
   leaders: [
-    { key: "name", label: "Nama" }, { key: "nis", label: "NIS" }, { key: "whatsapp", label: "WhatsApp" },
+    { key: "name", label: "Nama" }, { key: "class_name", label: "Kelas" }, { key: "motto", label: "Motto" },
     { key: "instagram", label: "Instagram" }, { key: "role", label: "Jabatan" }, { key: "period", label: "Periode" },
   ],
   programs: [
@@ -60,7 +65,7 @@ const exportColumns = {
   ],
 };
 
-const BulkLeadersModal = ({ onClose, onSaved, setStatus, sekbids, existingLeaders }) => {
+const BulkLeadersModal = ({ onClose, onSaved, setStatus, sekbids }) => {
   const [rows, setRows] = useState([createLeaderRow(1)]);
   const [saving, setSaving] = useState(false);
 
@@ -81,20 +86,9 @@ const BulkLeadersModal = ({ onClose, onSaved, setStatus, sekbids, existingLeader
 
   const save = async (event) => {
     event.preventDefault();
-    const incomplete = rows.some((row) => !row.name.trim() || !row.nis.trim() || !row.whatsapp.trim() || !row.role.trim() || !row.period.trim() || !row.sekbid_id);
-    const nisValues = rows.map((row) => row.nis.trim());
-    const duplicateNis = new Set(nisValues).size !== nisValues.length || existingLeaders.some((leader) => nisValues.includes(leader.nis));
-    const invalidWhatsapp = rows.some((row) => !/^[+\d][\d\s-]{7,}$/.test(row.whatsapp));
+    const incomplete = rows.some((row) => !row.name.trim() || !row.class_name.trim() || !row.motto.trim() || !row.role.trim() || !row.period.trim() || !row.sekbid_id);
     if (incomplete) {
       setStatus({ loading: false, error: "Lengkapi nama, jabatan, dan periode setiap pengurus.", success: null });
-      return;
-    }
-    if (duplicateNis) {
-      setStatus({ loading: false, error: "NIS tidak boleh duplikat.", success: null });
-      return;
-    }
-    if (invalidWhatsapp) {
-      setStatus({ loading: false, error: "Nomor WhatsApp tidak valid.", success: null });
       return;
     }
     setSaving(true);
@@ -123,12 +117,12 @@ const BulkLeadersModal = ({ onClose, onSaved, setStatus, sekbids, existingLeader
         <div className="mt-6 overflow-x-auto rounded-xl border border-cream/15">
           <table className="w-full min-w-[900px] text-left font-outfit text-sm">
             <thead className="bg-ink text-xs uppercase tracking-wider text-cream/45">
-              <tr><th className="px-3 py-3">Nama</th><th className="px-3 py-3">NIS</th><th className="px-3 py-3">WhatsApp</th><th className="px-3 py-3">Instagram</th><th className="px-3 py-3">Sekbid</th><th className="px-3 py-3">Jabatan</th><th className="px-3 py-3">Periode</th><th className="px-3 py-3">Upload foto</th><th className="px-3 py-3">Urutan</th><th className="px-3 py-3" /></tr>
+              <tr><th className="px-3 py-3">Nama</th><th className="px-3 py-3">Kelas</th><th className="px-3 py-3">Motto</th><th className="px-3 py-3">Instagram</th><th className="px-3 py-3">Sekbid</th><th className="px-3 py-3">Jabatan</th><th className="px-3 py-3">Periode</th><th className="px-3 py-3">Upload foto</th><th className="px-3 py-3">Urutan</th><th className="px-3 py-3" /></tr>
             </thead>
             <tbody>
               {rows.map((row, index) => (
                 <tr key={index} className="border-t border-cream/10 align-top">
-                  {["name", "nis", "whatsapp", "instagram"].map((key) => (
+                  {["name", "class_name", "motto", "instagram"].map((key) => (
                     <td key={key} className="p-2"><input required value={row[key]} onChange={(event) => updateRow(index, key, event.target.value)} className="admin-input mt-0" /></td>
                   ))}
                   <td className="p-2"><select required value={row.sekbid_id} onChange={(event) => { updateRow(index, "sekbid_id", event.target.value); updateRow(index, "role", ""); }} className="admin-input mt-0"><option value="">Pilih</option>{sekbids.map((sekbid) => <option key={sekbid.id} value={sekbid.id}>{sekbid.name}</option>)}</select></td>
@@ -240,7 +234,10 @@ const AdminUsersPanel = ({ setStatus }) => {
   );
 };
 
-const AdminForm = ({ table, config, formState, onChange, onClose, onSubmit, status, setStatus, options, modal = false }) => (
+const AdminForm = ({ table, config, formState, onChange, onClose, onSubmit, status, setStatus, options, modal = false }) => {
+  const [classGroup, setClassGroup] = useState(Object.entries(classGroups).find(([, classes]) => classes.includes(formState.values.class_name))?.[0] || "");
+  const selectedClassGroup = classGroup || Object.entries(classGroups).find(([, classes]) => classes.includes(formState.values.class_name))?.[0] || "";
+  return (
   <form
     onSubmit={onSubmit}
     className={modal ? "max-h-[calc(100vh-2rem)] w-full max-w-xl overflow-y-auto rounded-2xl border border-cream/15 bg-charcoal p-4 shadow-2xl sm:max-h-[calc(100vh-3rem)] sm:p-8" : "h-fit rounded-xl border border-cream/15 bg-charcoal p-4 sm:p-6"}
@@ -270,6 +267,17 @@ const AdminForm = ({ table, config, formState, onChange, onClose, onSubmit, stat
           <textarea required={field.required} value={formState.values[field.key]} onChange={(event) => onChange(field.key, event.target.value)} className="admin-input min-h-24 resize-y" />
         ) : field.type === "richtext" ? (
           <RichTextEditor value={formState.values[field.key]} onChange={(value) => onChange(field.key, value)} />
+        ) : table === "leaders" && field.key === "class_name" ? (
+          <div className="grid gap-2 sm:grid-cols-2">
+            <select value={selectedClassGroup} onChange={(event) => { setClassGroup(event.target.value); onChange(field.key, ""); }} className="admin-input">
+              <option value="">Pilih tingkat kelas</option>
+              {Object.keys(classGroups).map((group) => <option key={group} value={group}>{group}</option>)}
+            </select>
+            <select required value={formState.values.class_name} onChange={(event) => onChange(field.key, event.target.value)} disabled={!selectedClassGroup} className="admin-input disabled:opacity-40">
+              <option value="">Pilih kelas</option>
+              {(classGroups[selectedClassGroup] || []).map((className) => <option key={className} value={className}>{className}</option>)}
+            </select>
+          </div>
         ) : field.type === "select" ? (
           <select required={field.required} value={formState.values[field.key]} onChange={(event) => onChange(field.key, event.target.value)} className="admin-input">
             {!field.required && <option value="">Pilih...</option>}
@@ -308,7 +316,8 @@ const AdminForm = ({ table, config, formState, onChange, onClose, onSubmit, stat
     ))}
     <button disabled={status.loading} className="mt-7 w-full rounded-full bg-orange px-5 py-3 font-outfit text-sm font-semibold text-ink disabled:opacity-50">Simpan</button>
   </form>
-);
+  );
+};
 
 const AdminDashboard = ({ session }) => {
   const navigate = useNavigate();
@@ -401,14 +410,6 @@ const AdminDashboard = ({ session }) => {
     const values = table === "blog_posts"
       ? { ...form.values, slug: slugify(form.values.title) }
       : form.values;
-    if (table === "leaders" && rows.some((row) => row.nis && row.nis === values.nis && row.id !== form.id)) {
-      setStatus({ loading: false, error: "NIS tersebut sudah digunakan oleh pengurus lain.", success: null });
-      return;
-    }
-    if (table === "leaders" && values.whatsapp && !/^[+\d][\d\s-]{7,}$/.test(values.whatsapp)) {
-      setStatus({ loading: false, error: "Nomor WhatsApp tidak valid.", success: null });
-      return;
-    }
     if (table === "blog_posts" && rows.some((row) => row.slug && row.slug === values.slug && row.id !== form.id)) {
       setStatus({ loading: false, error: "Slug Blog tersebut sudah digunakan.", success: null });
       return;

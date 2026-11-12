@@ -4,7 +4,8 @@ import { fetchSekbidOptions, uploadPublicLeaderImage } from "../lib/adminApi";
 
 const initialForm = {
   name: "",
-  nis: "",
+  class_name: "",
+  motto: "",
   period: "2026—27",
   sekbid_id: "",
   role: "",
@@ -21,11 +22,17 @@ const bphRoles = [
   "Bendahara 2",
 ];
 const divisionRoles = ["Co", "Anggota"];
+const classGroups = {
+  X: ["X-E1", "X-E2"],
+  XI: Array.from({ length: 10 }, (_, index) => `XI-F${index + 1}`),
+  XII: Array.from({ length: 10 }, (_, index) => `XII-F${index + 1}`),
+};
 
 const PublicLeaderForm = () => {
   const [form, setForm] = useState(initialForm);
   const [sekbids, setSekbids] = useState([]);
   const [state, setState] = useState({ loading: true, error: null, success: false });
+  const [classGroup, setClassGroup] = useState("");
 
   useEffect(() => {
     fetchSekbidOptions()
@@ -54,6 +61,7 @@ const PublicLeaderForm = () => {
       });
       if (error) throw new Error("Data belum dapat dikirim. Silakan coba lagi.");
       setForm(initialForm);
+      setClassGroup("");
       setState({ loading: false, error: null, success: true });
     } catch (error) {
       setState({ loading: false, error: error.message, success: false });
@@ -71,7 +79,7 @@ const PublicLeaderForm = () => {
         <section className="mt-8 rounded-xl border border-orange/25 bg-orange/10 p-5">
           <p className="font-outfit text-sm font-semibold text-orange">Cara mengisi form</p>
           <ol className="mt-3 list-decimal space-y-2 pl-5 font-outfit text-sm leading-6 text-cream/65">
-            <li>Isi nama, NIS, dan periode kepengurusan dengan data yang benar.</li>
+            <li>Isi nama, kelas, motto, dan periode kepengurusan dengan data yang benar.</li>
             <li>Pilih Sekbid terlebih dahulu, lalu pilih jabatan yang sesuai.</li>
             <li>Upload foto JPG, PNG, atau WEBP maksimal 5 MB.</li>
             <li>Periksa kembali data sebelum menekan tombol Kirim data.</li>
@@ -79,7 +87,9 @@ const PublicLeaderForm = () => {
         </section>
         <form onSubmit={submit} className="mt-12 rounded-2xl border border-cream/15 bg-charcoal p-6 sm:p-8">
           <label className="block font-outfit text-sm text-cream/70">Nama lengkap<input required value={form.name} onChange={(event) => update("name", event.target.value)} className="admin-input" /></label>
-          <label className="mt-5 block font-outfit text-sm text-cream/70">NIS<input required value={form.nis} onChange={(event) => update("nis", event.target.value)} className="admin-input" inputMode="numeric" /></label>
+          <label className="mt-5 block font-outfit text-sm text-cream/70">Tingkat kelas<select required value={classGroup} onChange={(event) => { setClassGroup(event.target.value); update("class_name", ""); }} className="admin-input"><option value="">Pilih tingkat kelas</option>{Object.keys(classGroups).map((group) => <option key={group} value={group}>{group}</option>)}</select></label>
+          <label className="mt-5 block font-outfit text-sm text-cream/70">Kelas<select required value={form.class_name} onChange={(event) => update("class_name", event.target.value)} disabled={!classGroup} className="admin-input disabled:opacity-40"><option value="">Pilih kelas</option>{(classGroups[classGroup] || []).map((className) => <option key={className} value={className}>{className}</option>)}</select></label>
+          <label className="mt-5 block font-outfit text-sm text-cream/70">Motto<textarea required value={form.motto} onChange={(event) => update("motto", event.target.value)} className="admin-input min-h-24 resize-y" /></label>
           <label className="mt-5 block font-outfit text-sm text-cream/70">Periode<input required value={form.period} onChange={(event) => update("period", event.target.value)} className="admin-input" /></label>
           <label className="mt-5 block font-outfit text-sm text-cream/70">Sekbid
             <select required value={form.sekbid_id} onChange={(event) => updateSekbid(event.target.value)} className="admin-input">

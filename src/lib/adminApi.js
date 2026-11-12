@@ -25,11 +25,11 @@ export const adminTables = {
   },
   leaders: {
     label: "Pengurus",
-    columns: ["name", "nis", "whatsapp", "instagram", "role", "period", "sekbid_id", "image_url", "sort_order", "published"],
+    columns: ["name", "class_name", "motto", "instagram", "role", "period", "sekbid_id", "image_url", "sort_order", "published"],
     fields: [
       { key: "name", label: "Nama", type: "text", required: true },
-      { key: "nis", label: "NIS", type: "text", required: true },
-      { key: "whatsapp", label: "Nomor WhatsApp", type: "tel", required: true },
+      { key: "class_name", label: "Kelas", type: "select", options: ["X-E1", "X-E2", ...Array.from({ length: 10 }, (_, index) => `XI-F${index + 1}`), ...Array.from({ length: 10 }, (_, index) => `XII-F${index + 1}`)], required: true },
+      { key: "motto", label: "Motto", type: "textarea", required: true },
       { key: "instagram", label: "Instagram", type: "text" },
       { key: "period", label: "Periode", type: "text", required: true },
       { key: "sekbid_id", label: "Sekbid", type: "select", dynamicOptions: "sekbids", required: true },

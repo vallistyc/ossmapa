@@ -9,7 +9,7 @@ const steps = [
   {
     title: "Kelola Pengurus",
     description: "Buka tab Pengurus untuk menambah atau mengubah data pengurus. Gunakan Pendataan cepat untuk memasukkan beberapa orang sekaligus.",
-    checklist: ["Pastikan nama, NIS, WhatsApp, Sekbid, jabatan, dan periode benar.", "Upload foto JPG, PNG, atau WEBP maksimal 5 MB langsung dari perangkat.", "Klik Salin link form untuk membagikan form pendataan kepada siswa."],
+    checklist: ["Pastikan nama, kelas, motto, Sekbid, jabatan, dan periode benar.", "Upload foto JPG, PNG, atau WEBP maksimal 5 MB langsung dari perangkat.", "Klik Salin link form untuk membagikan form pendataan kepada siswa."],
   },
   {
     title: "Kelola dan bagikan Proker",

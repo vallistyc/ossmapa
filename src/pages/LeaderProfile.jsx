@@ -40,8 +40,8 @@ const LeaderProfile = () => {
             <p className="mt-5 font-outfit text-xl text-cream/65">{leader.role}</p>
             <p className="mt-2 font-outfit text-sm text-cream/45">Periode {leader.period}</p>
             <div className="mt-8 space-y-3 border-t border-cream/15 pt-6 font-outfit text-sm text-cream/65">
-              {leader.nis && <p><span className="text-cream/35">NIS</span> {leader.nis}</p>}
-              {leader.whatsapp && <p><span className="text-cream/35">WhatsApp</span> {leader.whatsapp}</p>}
+              {leader.class_name && <p><span className="text-cream/35">Kelas</span> {leader.class_name}</p>}
+              {leader.motto && <p><span className="text-cream/35">Motto</span> {leader.motto}</p>}
               {leader.instagram && <p><span className="text-cream/35">Instagram</span> {leader.instagram}</p>}
             </div>
           </div>
