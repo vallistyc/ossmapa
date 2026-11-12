@@ -14,15 +14,6 @@ export const fetchAdminInvitations = async () => {
   return data ?? [];
 };
 
-export const createAdminInvitation = async (email) => {
-  assertConfigured();
-  const { error } = await supabase.from("admin_invitations").upsert(
-    { email: email.trim().toLowerCase(), invited_by: (await supabase.auth.getUser()).data.user.id },
-    { onConflict: "email" },
-  );
-  if (error) throw new Error(`Gagal membuat undangan: ${error.message}`);
-};
-
 export const revokeAdminInvitation = async (id) => {
   assertConfigured();
   const { error } = await supabase.from("admin_accounts").update({ approved: false, approved_at: null, approved_by: null }).eq("id", id);

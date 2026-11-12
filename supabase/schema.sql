@@ -151,18 +151,9 @@ security definer
 set search_path = public
 as $$
 begin
-  if exists (
-    select 1 from public.admin_invitations
-    where email = lower(trim(new.email))
-      and accepted_at is null
-  ) then
-    insert into public.admin_accounts (user_id, email)
-    values (new.id, lower(trim(new.email)))
-    on conflict (user_id) do nothing;
-    update public.admin_invitations
-    set accepted_at = now()
-    where email = lower(trim(new.email)) and accepted_at is null;
-  end if;
+  insert into public.admin_accounts (user_id, email)
+  values (new.id, lower(trim(new.email)))
+  on conflict (user_id) do nothing;
   return new;
 end;
 $$;

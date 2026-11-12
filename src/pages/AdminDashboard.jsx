@@ -17,7 +17,6 @@ import RichTextEditor from "../components/RichTextEditor";
 import AdminDashboardOverview from "./AdminDashboardOverview";
 import AdminTutorial from "./AdminTutorial";
 import {
-  createAdminInvitation,
   fetchAdminInvitations,
   revokeAdminInvitation,
   verifyAdminAccount,
@@ -173,7 +172,6 @@ const DeleteConfirmationModal = ({ row, label, onClose, onConfirm, loading }) =>
 );
 
 const AdminUsersPanel = ({ setStatus }) => {
-  const [email, setEmail] = useState("");
   const [invitations, setInvitations] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -205,18 +203,6 @@ const AdminUsersPanel = ({ setStatus }) => {
     };
   }, [setStatus]);
 
-  const invite = async (event) => {
-    event.preventDefault();
-    try {
-      await createAdminInvitation(email);
-      setEmail("");
-      await loadInvitations();
-      setStatus({ loading: false, error: null, success: "Undangan admin berhasil dibuat." });
-    } catch (error) {
-      setStatus({ loading: false, error: error.message, success: null });
-    }
-  };
-
   const revoke = async (id) => {
     try {
       await revokeAdminInvitation(id);
@@ -240,17 +226,13 @@ const AdminUsersPanel = ({ setStatus }) => {
   return (
     <section className="mt-8 max-w-3xl rounded-xl border border-cream/15 bg-charcoal p-6">
       <p className="eyebrow text-orange">Akses</p>
-      <h2 className="mt-2 font-outfit text-2xl font-semibold">Admin lainnya</h2>
-      <p className="mt-2 font-outfit text-sm leading-6 text-cream/50">Undang email, lalu minta calon admin mendaftar melalui <code>/admin/register</code>. Setelah akun muncul di tabel, klik Verifikasi di sini agar akun dapat masuk.</p>
-      <form onSubmit={invite} className="mt-6 flex flex-col gap-3 sm:flex-row">
-        <input required type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="email@sekolah.sch.id" className="admin-input mt-0 flex-1" />
-        <button className="rounded-full bg-orange px-5 py-3 font-outfit text-sm font-semibold text-ink">Undang admin</button>
-      </form>
+      <h2 className="mt-2 font-outfit text-2xl font-semibold">Verifikasi Admin</h2>
+      <p className="mt-2 font-outfit text-sm leading-6 text-cream/50">Semua akun yang baru mendaftar otomatis muncul di sini. Periksa emailnya, lalu klik Verifikasi agar akun dapat masuk ke panel admin.</p>
       <div className="mt-8 overflow-x-auto rounded-lg border border-cream/10">
-        {loading ? <p className="p-4 font-outfit text-sm text-cream/50">Memuat undangan...</p> : (
+        {loading ? <p className="p-4 font-outfit text-sm text-cream/50">Memuat akun admin...</p> : (
           <table className="w-full min-w-[520px] text-left font-outfit text-sm">
             <thead className="bg-ink text-xs uppercase tracking-wider text-cream/45"><tr><th className="px-4 py-3">Email</th><th className="px-4 py-3">Status</th><th className="px-4 py-3 text-right">Aksi</th></tr></thead>
-            <tbody>{invitations.map((invitation) => <tr key={invitation.id} className="border-t border-cream/10"><td className="px-4 py-3">{invitation.email}</td><td className="px-4 py-3 text-xs text-cream/55">{invitation.approved ? "Terverifikasi" : "Menunggu verifikasi"}</td><td className="px-4 py-3 text-right">{invitation.approved ? <button onClick={() => revoke(invitation.id)} className="text-red-400 hover:underline">Batalkan</button> : <button onClick={() => verify(invitation.id)} className="font-semibold text-orange hover:underline">Verifikasi</button>}</td></tr>)}</tbody>
+            <tbody>{invitations.length === 0 ? <tr><td colSpan="3" className="px-4 py-6 text-center text-cream/45">Belum ada akun admin yang mendaftar.</td></tr> : invitations.map((invitation) => <tr key={invitation.id} className="border-t border-cream/10"><td className="px-4 py-3">{invitation.email}</td><td className="px-4 py-3 text-xs text-cream/55">{invitation.approved ? "Terverifikasi" : "Menunggu verifikasi"}</td><td className="px-4 py-3 text-right">{invitation.approved ? <button onClick={() => revoke(invitation.id)} className="text-red-400 hover:underline">Batalkan</button> : <button onClick={() => verify(invitation.id)} className="font-semibold text-orange hover:underline">Verifikasi</button>}</td></tr>)}</tbody>
           </table>
         )}
       </div>

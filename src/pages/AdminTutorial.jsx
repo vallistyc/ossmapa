@@ -29,7 +29,7 @@ const steps = [
   {
     title: "Kelola konten dan admin",
     description: "Gunakan tab Sekbid, Blog, Sponsor, dan Aspirasi untuk memperbarui konten. Tab Admin dipakai untuk mengatur akses pengelola.",
-    checklist: ["Gunakan editor rich text untuk menulis Blog.", "Perbarui status Aspirasi setelah ditindaklanjuti.", "Undang email, minta calon admin mendaftar, lalu klik Verifikasi pada tab Admin."],
+    checklist: ["Gunakan editor rich text untuk menulis Blog.", "Perbarui status Aspirasi setelah ditindaklanjuti.", "Semua pendaftar muncul di tab Admin; periksa email lalu klik Verifikasi."],
   },
 ];
 

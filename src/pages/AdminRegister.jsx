@@ -45,7 +45,7 @@ const AdminRegister = ({ session }) => {
       <form onSubmit={submit} className="w-full max-w-md rounded-2xl border border-cream/15 bg-charcoal p-8 shadow-2xl">
         <p className="eyebrow text-orange">OSSMAPA / Admin</p>
         <h1 className="mt-4 font-outfit text-4xl font-semibold">Daftar admin.</h1>
-        <p className="mt-3 font-outfit text-sm leading-6 text-cream/55">Halaman ini hanya dapat digunakan oleh email yang sudah diundang admin.</p>
+        <p className="mt-3 font-outfit text-sm leading-6 text-cream/55">Setelah mendaftar, akunmu akan menunggu verifikasi dari admin melalui tab Admin.</p>
         <label className="mt-8 block font-outfit text-xs text-cream/70">Email<input required type="email" autoComplete="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} className="admin-input" /></label>
         <label className="mt-4 block font-outfit text-xs text-cream/70">Password<input required type="password" autoComplete="new-password" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} className="admin-input" /></label>
         <label className="mt-4 block font-outfit text-xs text-cream/70">Konfirmasi password<input required type="password" autoComplete="new-password" value={form.confirmation} onChange={(event) => setForm({ ...form, confirmation: event.target.value })} className="admin-input" /></label>
