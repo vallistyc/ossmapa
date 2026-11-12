@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
 
@@ -7,7 +7,8 @@ const AdminLogin = ({ session }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [resetMode, setResetMode] = useState(false);
-  const isAdmin = session?.user?.app_metadata?.role === "admin";
+  const [approved, setApproved] = useState(null);
+  const isAdmin = session?.user?.app_metadata?.role === "admin" || approved === true;
   const loginError = new URLSearchParams(window.location.search).get("error");
   const [status, setStatus] = useState({
     loading: false,
@@ -18,6 +19,29 @@ const AdminLogin = ({ session }) => {
         : null,
     success: null,
   });
+
+  useEffect(() => {
+    if (!session || !supabase) {
+      return undefined;
+    }
+    let active = true;
+    supabase
+      .from("admin_accounts")
+      .select("approved")
+      .eq("user_id", session.user.id)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (!active) return;
+        if (error) {
+          setStatus({ loading: false, error: "Status verifikasi admin gagal dimuat.", success: null });
+          return;
+        }
+        setApproved(Boolean(data?.approved));
+      });
+    return () => {
+      active = false;
+    };
+  }, [session]);
 
   if (session && isAdmin) return <Navigate to="/admin" replace />;
 
@@ -35,14 +59,28 @@ const AdminLogin = ({ session }) => {
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        if (data.session?.user?.app_metadata?.role !== "admin") {
+        const { data: account, error: accountError } = await supabase
+          .from("admin_accounts")
+          .select("approved")
+          .eq("user_id", data.session?.user?.id)
+          .maybeSingle();
+        if (accountError) throw accountError;
+        if (!account?.approved) {
           setStatus({ loading: false, error: "Akun ini belum memiliki akses admin.", success: null });
           return;
         }
         navigate("/admin", { replace: true });
       }
-    } catch {
-      setStatus({ loading: false, error: "Email atau password tidak valid.", success: null });
+    } catch (error) {
+      setStatus({
+        loading: false,
+        error: error.code === "email_not_confirmed"
+          ? "Login tertahan karena Confirm email masih aktif di Supabase. Nonaktifkan pengaturan tersebut agar verifikasi dilakukan dari tab Admin."
+          : error.message === "Invalid login credentials"
+            ? "Email atau password tidak valid."
+            : error.message,
+        success: null,
+      });
     }
   };
 
