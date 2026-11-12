@@ -41,7 +41,7 @@ const createLeaderRow = (index) => ({
 const bphRoles = ["Ketua Umum", "Ketua 1", "Ketua 2", "Sekretaris 1", "Sekretaris 2", "Bendahara 1", "Bendahara 2"];
 const divisionRoles = ["Co", "Anggota"];
 const classGroups = {
-  X: ["X-E1", "X-E2"],
+  X: Array.from({ length: 10 }, (_, index) => `X-E${index + 1}`),
   XI: Array.from({ length: 10 }, (_, index) => `XI-F${index + 1}`),
   XII: Array.from({ length: 10 }, (_, index) => `XII-F${index + 1}`),
 };

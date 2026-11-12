@@ -28,7 +28,7 @@ export const adminTables = {
     columns: ["name", "class_name", "motto", "instagram", "role", "period", "sekbid_id", "image_url", "sort_order", "published"],
     fields: [
       { key: "name", label: "Nama", type: "text", required: true },
-      { key: "class_name", label: "Kelas", type: "select", options: ["X-E1", "X-E2", ...Array.from({ length: 10 }, (_, index) => `XI-F${index + 1}`), ...Array.from({ length: 10 }, (_, index) => `XII-F${index + 1}`)], required: true },
+      { key: "class_name", label: "Kelas", type: "select", options: [...Array.from({ length: 10 }, (_, index) => `X-E${index + 1}`), ...Array.from({ length: 10 }, (_, index) => `XI-F${index + 1}`), ...Array.from({ length: 10 }, (_, index) => `XII-F${index + 1}`)], required: true },
       { key: "motto", label: "Motto", type: "textarea", required: true },
       { key: "instagram", label: "Instagram", type: "text" },
       { key: "period", label: "Periode", type: "text", required: true },

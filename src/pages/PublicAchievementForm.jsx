@@ -2,7 +2,7 @@ import { useState } from "react";
 import { submitAchievement } from "../lib/homeDataApi";
 
 const classGroups = {
-  X: ["X-E1", "X-E2"],
+  X: Array.from({ length: 10 }, (_, index) => `X-E${index + 1}`),
   XI: Array.from({ length: 10 }, (_, index) => `XI-F${index + 1}`),
   XII: Array.from({ length: 10 }, (_, index) => `XII-F${index + 1}`),
 };
